@@ -35,4 +35,31 @@ El guard tiene que estar basado en la autenticación, Firebase tiene varias opci
 
 
 Documento de base de datos por cada usuario:
-Creamos el modelo usuario
+Creamos el modelo usuario para poder mandar el usuario a la base de datos de Firebase, todo eso lo realizamos en auth.service.ts
+
+
+
+
+
+//Sección 8
+
+Crearemos una sección en el store para el estado de la app (si está cargando, si hay algo en el background, etc)
+Utilizaremos unos snippets (a través de un shortcode se autocompleta todo) para evitar tener que hacer copy paste en la página NgRx de la creación básica de actions y reducers
+Creamos ui.actions.ts y ui.reducer.ts
+
+Creamos ahora el reducer global de la app (app.reducer.ts)
+Ahora editamos lo necesario en app.module.ts tanto de storeModule como DevTools (hacer instalación)
+
+Hacemos los dispatch tanto en login como en registro: poniendo en OnInit la subscripción a la store, haciendo el dispatch en los momentos en los que el estado cambia (al darle click a login o a registrar y al recibir el then tanto en el login como en el registro)
+En el onDestroy hay que hacer unsubscribe, para ello creamos una constante de tipo subscribe donde almacenaremos la suscripción a la store para poder llamar al método unsubscribe en el onDestroy
+
+
+CAMBIANDO EL SWAL.FIRE DE CARGANDO
+Vamos a poner un mensaje menos intrusivo, por lo que dejaremos lo de SWAL comentado y pondremos en el html de login y de registro dos botones: el de login/crear cuenta nueva lo mantendremos y ahora añadimos un botón que diga "Espere..." 
+A través de un ngIf mostraremos un botón u otro en función de si la propiedad cargando del .ts (asociada a su vez al estado de la app) está en true o false
+
+
+
+AÑADIR INFO AL STATE: INFO DEL USUARIO
+
+Creamos auth.actions.ts y auth.reducer.ts

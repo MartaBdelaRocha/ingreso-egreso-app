@@ -1,6 +1,11 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
+//NgRx
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { appReducers } from './app.reducer';
+
 //Módulos creados
 import { AppRoutingModule } from './app-routing.module';
 
@@ -26,6 +31,7 @@ import { SidebarComponent } from './shared/sidebar/sidebar.component';
 
 import { environment } from '../environments/environment';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -45,7 +51,13 @@ import { environment } from '../environments/environment';
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    StoreModule.forRoot(appReducers),
+    StoreDevtoolsModule.instrument({
+      maxAge:25,
+      logOnly:environment.production
+    })
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

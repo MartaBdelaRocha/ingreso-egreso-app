@@ -1,15 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/app.reducer';
 import { AuthService } from 'src/app/services/auth.service';
 import Swal from 'sweetalert2';
+import { isLoading, stopLoading } from 'src/app/shared/ui.actions';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit,OnDestroy {
 
   registroForm!: FormGroup;
   //Creamos la variable de tipo formGroup y metemos en el constructor el formBuilder. 
@@ -24,10 +28,15 @@ export class RegisterComponent implements OnInit {
   // <i *ngIf="registroForm.get('password')?.valid" class="fa fa-check-circle"></i> Hemos puesto un ngIf para que nos ponga este símbolo cuando cada campo sea válido
   //He tenido que poner ? después del get de las variables porque sino no compila diciendo que el objeto quizás sea nulo
 
+  cargando: boolean = false;
+  uiSubscription!: Subscription;
+
+
   constructor(private fb: FormBuilder, 
               private authService:AuthService,
-              private router:Router) { }
-
+              private router:Router,
+              private store:Store<AppState>) { }
+ 
   ngOnInit(): void {
 
     this.registroForm = this.fb.group({
@@ -36,6 +45,14 @@ export class RegisterComponent implements OnInit {
       password: ['', Validators.required]
 
     })
+
+    this.uiSubscription = this.store.select('ui').subscribe(ui =>{
+      this.cargando = ui.isLoading
+      console.log('cargando subs');
+    })
+  }
+  ngOnDestroy(): void {
+    this.uiSubscription.unsubscribe();
   }
 
   crearUsuario(){
@@ -50,11 +67,13 @@ export class RegisterComponent implements OnInit {
     //Realizamos aquí la desestructuración para enviar esos valores al llamar al método
     //OJO! inyectar servicio en el constructor
     
-    Swal.fire({
-      title: 'Espere por favor',
-      didOpen: () => {
-        Swal.showLoading()}     
-    })
+    this.store.dispatch(isLoading());
+
+    // Swal.fire({
+    //   title: 'Espere por favor',
+    //   didOpen: () => {
+    //     Swal.showLoading()}     
+    // })
 
 
     const {nombre,correo,password} = this.registroForm.value;
@@ -62,7 +81,8 @@ export class RegisterComponent implements OnInit {
     this.authService.crearUsuario(nombre,correo,password)
     .then(credenciales => {
       console.log(credenciales);
-      Swal.close();
+      // Swal.close();
+      this.store.dispatch(stopLoading());
       this.router.navigate(['/']);
     })
     //.catch(err=> console.error(err)) 
@@ -73,6 +93,7 @@ export class RegisterComponent implements OnInit {
     //Importamos el router y lo inyectamos en el constructor para que tras la correcta creación de usuario redireccione al dashboard
     //la llamada al router se hace en el then de la promise, que es quien recibe los datos en caso de que todo vaya bien
     .catch(err=> {
+      this.store.dispatch(stopLoading());
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
