@@ -7,5 +7,5 @@ export const setUser = createAction(
 );
 
 export const unsetUser = createAction(
-        '[Auth] setUser' //No hacen falta argumentos porque simplemente vamos a quitar al usuario activo
+        '[Auth] UnsetUser' //No hacen falta argumentos porque simplemente vamos a quitar al usuario activo
 );

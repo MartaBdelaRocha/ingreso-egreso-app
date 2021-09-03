@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     this.uiSubscription = this.store.select('ui').subscribe(ui =>{
       this.cargando = ui.isLoading
-      console.log('cargando subs');
+      
     })
 
   }
@@ -61,6 +61,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 //Pero en caso de credenciales correctas habría que cerrarlo
 
     const { email, password } = this.loginForm.value;
+    
     this.authService.loginUsuario(email, password)
       .then(credenciales => {
         console.log(credenciales);

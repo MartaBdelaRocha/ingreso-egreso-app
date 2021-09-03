@@ -12,6 +12,9 @@ import { AppRoutingModule } from './app-routing.module';
 //Forms
 import { ReactiveFormsModule } from '@angular/forms';
 
+//Charts
+import { ChartsModule } from 'ng2-charts';
+
 //Firebase
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
@@ -30,6 +33,7 @@ import { NavbarComponent } from './shared/navbar/navbar.component';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
 
 import { environment } from '../environments/environment';
+import { OrdenIngresoPipe } from './pipes/orden-ingreso.pipe';
 
 
 @NgModule({
@@ -43,12 +47,14 @@ import { environment } from '../environments/environment';
     DetalleComponent,
     FooterComponent,
     NavbarComponent,
-    SidebarComponent
+    SidebarComponent,
+    OrdenIngresoPipe
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    ChartsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,

@@ -63,3 +63,9 @@ A través de un ngIf mostraremos un botón u otro en función de si la propiedad
 AÑADIR INFO AL STATE: INFO DEL USUARIO
 
 Creamos auth.actions.ts y auth.reducer.ts
+
+
+<!-- Sección 9 -->
+
+Creamos el modelo ingreso-egreso
+Creamos el servicio ingreso-egreso para insertar los datos en firestore
