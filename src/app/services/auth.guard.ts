@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, CanLoad, Route, Router, RouterStateSnapshot, UrlSegment, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { take, tap } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class AuthGuard implements CanActivate, CanLoad {
 
   constructor(private auth:AuthService,
               private router:Router){}
+
 
   canActivate(): Observable<boolean> { //Cambiamos el tipo de dato devuelto, el método isAuth devuelve un observable que resuelve un boleano
     return this.auth.isAuth() //Si este guard devuelve true es que puede acceder en app-routing a DashBoard
@@ -20,5 +21,19 @@ export class AuthGuard implements CanActivate {
             })
           );
   }
+
+
+  canLoad(): Observable<boolean> {
+    
+    return this.auth.isAuth() 
+    .pipe(
+      tap(estado => {    
+        if(!estado){this.router.navigate(['/login'])}
+      }),
+      take(1)
+    );
+  }
+  
+
   
 }

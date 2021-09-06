@@ -69,3 +69,24 @@ Creamos auth.actions.ts y auth.reducer.ts
 
 Creamos el modelo ingreso-egreso
 Creamos el servicio ingreso-egreso para insertar los datos en firestore
+
+
+<!-- SECCIÓN 10 -->
+
+Tal y como dejamos el código al terminar la sección 9, al iniciar la app en la página login carga también el módulo ingresos egresos, pero no nos interesa que se cargue
+antes de estar logueados, así la app será más ligera, cargará más rápido, para ello modularizaremos la app.
+Separaremos primero el Auth como un módulo aparte, crearemos el módulo Auth
+Creamos también el SharedModule y el ingresoEgreso Module
+
+Tras crear ingresoEgreso Module, aparentemente todo funciona, pero no carga los componentes de estdistica ni detalle ni ninguna ruta interna de dashboard routes
+Hay que cambiar por lo tanto la forma de especificarle a Angular las rutas hijas ahora que está todo repartido en módulos. 
+Primero comentamos parte de las Routes del app-routing module y después creamos en el dashboad un módulo donde pondremos solo las rutas
+
+Creamos después el Lazy Load en app-routing module. Pero hasta este punto, cualquiera podría entrar en la app sin estar loggeado tan solo poniendo la url, por ello hay que crear la prevención, lo que antes era el Guard canActivate, que trasladamos comentado a dashboard-routes module, ahora hay que crear un Guard que evite que cargue el módulo ingreso-egreso si el usuario no está autenticado, por lo que hay que ponerlo en app-routing module.
+Se podría colocar el canActive: [AuthGuard] en el lazy Load justo antes de loadChildren porque efectivamente previene de entrar, sin embargo aunque no se consigue entrar sin estar loggeado, sí que carga el módulo en memoria, para ello en vez de canActivate utilizaremos canLoad, implementando también el método canLoad en el auth.Guard.ts
+
+LAZY LOAD a los elementos de la store
+
+En el login ya se cargan los elementos de la store por lo que un usuario sin autenticar puede ver qué cosas forman parte de la app, pero no nos interesa que elementos de usuarios autenticados (ingreso egreso) pueda verlos alguien que no está autenticado. 
+Para ello borramos el reducer de ingreso-egreso del app-reducer y en el ingreso-egreso.module hacemos un import de la store donde le decimos que cargue el reducer ingresoEgreso
+Hay que hacer también un extends de AppSate dentro del ingreso-egreso reducer, y ese nuevo AppState es el tipo que va a tener aquellos componentes que usen el elemento ingresoEgreso de la store (en este caso estadística y detalle)

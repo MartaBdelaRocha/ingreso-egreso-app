@@ -13,9 +13,19 @@ const routes: Routes = [
 
     { path: 'login', component: LoginComponent},
     { path: 'register', component: RegisterComponent},
-    { path: '', component: DahsboardComponent, 
-                children: dashboardRoutes, 
-                canActivate:[AuthGuard]},
+    //Esto lo trasladamos a dashboard-routes.module
+    // { path: '', component: DahsboardComponent, 
+    //             children: dashboardRoutes, 
+    //             canActivate:[AuthGuard]},
+
+    //Aquí realizamos el LazyLoad
+    {
+        path:'',
+        //canAvtivate: [AuthGuard]
+        canLoad: [AuthGuard],
+        loadChildren: () => import('./ingreso-egreso/ingreso-egreso.module').then( modulo => modulo.IngresoEgresoModule)
+    },
+
     { path: '**', redirectTo: ''}
 ];
 

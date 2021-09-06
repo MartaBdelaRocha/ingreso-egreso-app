@@ -22,39 +22,27 @@ import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 
 //Componentes
 import { AppComponent } from './app.component';
-import { LoginComponent } from './auth/login/login.component';
-import { RegisterComponent } from './auth/register/register.component';
-import { DahsboardComponent } from './dahsboard/dahsboard.component';
-import { IngresoEgresoComponent } from './ingreso-egreso/ingreso-egreso.component';
-import { EstadisticaComponent } from './ingreso-egreso/estadistica/estadistica.component';
-import { DetalleComponent } from './ingreso-egreso/detalle/detalle.component';
-import { FooterComponent } from './shared/footer/footer.component';
-import { NavbarComponent } from './shared/navbar/navbar.component';
-import { SidebarComponent } from './shared/sidebar/sidebar.component';
 
 import { environment } from '../environments/environment';
-import { OrdenIngresoPipe } from './pipes/orden-ingreso.pipe';
+
+//Módulos
+import { AuthModule } from './auth/auth.module';
+import { SharedModule } from './shared/shared.module';
+import { IngresoEgresoModule } from './ingreso-egreso/ingreso-egreso.module';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
-    RegisterComponent,
-    DahsboardComponent,
-    IngresoEgresoComponent,
-    EstadisticaComponent,
-    DetalleComponent,
-    FooterComponent,
-    NavbarComponent,
-    SidebarComponent,
-    OrdenIngresoPipe
+    
   ],
   imports: [
     BrowserModule,
+    AuthModule,
+    //IngresoEgresoModule, Quitamos este módulo de aquí para poder hacer el LazyLoad en el app-routing
     AppRoutingModule,
-    ReactiveFormsModule,
-    ChartsModule,
+    //ReactiveFormsModule, necesario en Auth e IngresoEgreso, por lo que lo importamos en ambos módulos y borramos aquí
+    //ChartsModule, Lo movemos a quien lo usa (dashboard, por lo que pasa a ingreoEgreso Module)
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,

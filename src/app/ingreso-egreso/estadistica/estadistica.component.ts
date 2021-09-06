@@ -5,6 +5,7 @@ import { AppState } from '../../app.reducer';
 
 import { ChartType } from 'chart.js';
 import { MultiDataSet, Label, Color } from 'ng2-charts';
+import { appStateWithIngresoEgreso } from '../ingreso-egreso.reducer';
 
 
 @Component({
@@ -28,10 +29,10 @@ export class EstadisticaComponent implements OnInit {
     backgroundColor: ['#FF0000','#00A300']
    }];
 
-  constructor(private store: Store<AppState>) { }
+  constructor(private store: Store<appStateWithIngresoEgreso>) { }
 
   ngOnInit(): void {
-    this.store.select('ingresoEgresos')
+    this.store.select('ingresosEgresos')
       .subscribe(({items}) => this.generarEstadistica(items))
   }
 
